@@ -199,7 +199,7 @@ export default function Hero() {
             >
               <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl p-8 backdrop-blur-sm border border-white/10">
                 <img 
-                  src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                  src="https://auto.mahindra.com/dw/image/v2/BKRC_PRD/on/demandware.static/-/Sites-mahindra-product-catalog/default/dwa29dfc3c/images/PUP/large/PUP.png?sw=360&sh=202"
                   alt="Bengal Transport Pickup Truck"
                   className="w-full h-auto rounded-2xl shadow-2xl"
                 />
