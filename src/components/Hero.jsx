@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Truck, MapPin, Clock, Shield, ArrowRight, Phone } from 'lucide-react';
@@ -14,6 +14,18 @@ export default function Hero() {
   const imageRef = useRef(null);
   const featuresRef = useRef(null);
   const overlayRef = useRef(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [
+    {
+      src: "https://auto.mahindra.com/dw/image/v2/BKRC_PRD/on/demandware.static/-/Sites-mahindra-product-catalog/default/dwa29dfc3c/images/PUP/large/PUP.png?sw=360&sh=202",
+      alt: "Bengal Transport Pickup Truck"
+    },
+    {
+      src: "https://trucksbuses.com/uploads/21293_d41efd757cd0451d8dd441affd0b8a48Tata-1616-LPT.png",
+      alt: "Bengal Transport Commercial Vehicle"
+    }
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -107,6 +119,17 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
+  // Image carousel effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000); // Change image every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   const features = [
     { icon: Truck, text: "10+ Trucks", color: "text-blue-400" },
     { icon: MapPin, text: "Pan India", color: "text-green-400" },
@@ -173,7 +196,6 @@ export default function Hero() {
               </a>
             </div>
 
-
             {/* Feature Icons */}
             <div ref={featuresRef} className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
               {features.map((feature, index) => (
@@ -187,18 +209,42 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Content - Truck Image */}
+          {/* Right Content - Image Carousel */}
           <div className="relative">
             <div 
               ref={imageRef}
               className="relative z-10"
             >
               <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl p-8 backdrop-blur-sm border border-white/10">
-                <img 
-                  src="https://auto.mahindra.com/dw/image/v2/BKRC_PRD/on/demandware.static/-/Sites-mahindra-product-catalog/default/dwa29dfc3c/images/PUP/large/PUP.png?sw=360&sh=202"
-                  alt="Bengal Transport Pickup Truck"
-                  className="w-full h-auto rounded-2xl shadow-2xl"
-                />
+                <div className="relative overflow-hidden rounded-2xl">
+                  {images.map((image, index) => (
+                    <img 
+                      key={index}
+                      src={image.src}
+                      alt={image.alt}
+                      className={`w-full h-auto shadow-2xl transition-all duration-1000 ease-in-out ${
+                        index === currentImageIndex 
+                          ? 'opacity-100 transform translate-x-0' 
+                          : 'opacity-0 transform translate-x-full absolute top-0 left-0'
+                      }`}
+                    />
+                  ))}
+                </div>
+                
+                {/* Image indicators */}
+                <div className="flex justify-center gap-2 mt-6">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentImageIndex 
+                          ? 'bg-blue-400 scale-125' 
+                          : 'bg-white/30 hover:bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
