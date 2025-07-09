@@ -121,9 +121,14 @@ export default function Contact() {
     }
   };
   
-  // Handle form submission
-  const handleSubmit = async () => {
+  // Handle form submission with Formspree
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    console.log('Form submitted!', formData); // Debug log
+    
     if (!validateForm()) {
+      console.log('Validation failed', errors); // Debug log
       return;
     }
     
@@ -134,37 +139,64 @@ export default function Contact() {
     });
     
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Prepare form data for Formspree
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('service', formData.service);
+      formDataToSend.append('message', formData.message);
       
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: ''
+      console.log('Sending to Formspree...'); // Debug log
+      
+      // Submit to Formspree
+      const response = await fetch('https://formspree.io/f/xqabvjpr', {
+        method: 'POST',
+        body: formDataToSend,
+        headers: {
+          'Accept': 'application/json'
+        }
       });
       
-      setFormStatus({
-        isSubmitting: false,
-        isSubmitted: true,
-        error: null
-      });
+      console.log('Response status:', response.status); // Debug log
       
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setFormStatus(prev => ({
-          ...prev,
-          isSubmitted: false
-        }));
-      }, 5000);
+      if (response.ok) {
+        console.log('Form submitted successfully!'); // Debug log
+        // Reset form on success
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: ''
+        });
+        
+        setFormStatus({
+          isSubmitting: false,
+          isSubmitted: true,
+          error: null
+        });
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setFormStatus(prev => ({
+            ...prev,
+            isSubmitted: false
+          }));
+        }, 5000);
+        
+      } else {
+        const data = await response.json();
+        console.error('Form submission failed:', data); // Debug log
+        throw new Error(data.error || 'Form submission failed');
+      }
       
     } catch (error) {
+      console.error('Form submission error:', error);
       setFormStatus({
         isSubmitting: false,
         isSubmitted: false,
-        error: 'Failed to send message. Please try again.'
+        error: 'Failed to send message. Please try again or contact us directly.'
       });
     }
   };
@@ -315,7 +347,7 @@ export default function Contact() {
               </div>
             )}
             
-            <div className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                   Full Name *
@@ -331,6 +363,7 @@ export default function Contact() {
                   }`}
                   placeholder="Enter your name"
                   disabled={formStatus.isSubmitting}
+                  required
                 />
                 {errors.name && (
                   <p className="mt-1 text-sm text-red-600">{errors.name}</p>
@@ -352,6 +385,7 @@ export default function Contact() {
                   }`}
                   placeholder="Enter your email"
                   disabled={formStatus.isSubmitting}
+                  required
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -415,6 +449,7 @@ export default function Contact() {
                   }`}
                   placeholder="Tell us about your transport needs"
                   disabled={formStatus.isSubmitting}
+                  required
                 />
                 {errors.message && (
                   <p className="mt-1 text-sm text-red-600">{errors.message}</p>
@@ -423,8 +458,7 @@ export default function Contact() {
               
               <div>
                 <button 
-                  type="button" 
-                  onClick={handleSubmit}
+                  type="submit" 
                   disabled={formStatus.isSubmitting}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
@@ -441,25 +475,25 @@ export default function Contact() {
                   )}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
         
         <div 
-  className="mt-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100"
->
-  <div className="h-96 w-full relative">
-    <iframe
-      title="Bengal Transport Location"
-      src="https://www.google.com/maps?q=23.681230888904494,86.98885975192134&z=15&output=embed"
-      width="100%"
-      height="100%"
-      style={{ border: 0 }}
-      allowFullScreen=""
-      loading="lazy"
-    ></iframe>
-  </div>
-</div>
+          className="mt-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100"
+        >
+        <div className="h-96 w-full relative">
+          <iframe
+            title="Bengal Transport Location"
+            src="https://www.google.com/maps?q=23.681230888904494,86.98885975192134&z=15&output=embed"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
 
       </div>
     </section>
