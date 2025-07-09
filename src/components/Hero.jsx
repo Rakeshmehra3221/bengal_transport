@@ -108,7 +108,7 @@ export default function Hero() {
   }, []);
 
   const features = [
-    { icon: Truck, text: "500+ Trucks", color: "text-blue-400" },
+    { icon: Truck, text: "10+ Trucks", color: "text-blue-400" },
     { icon: MapPin, text: "Pan India", color: "text-green-400" },
     { icon: Clock, text: "24/7 Service", color: "text-yellow-400" },
     { icon: Shield, text: "Insured", color: "text-purple-400" }
@@ -161,22 +161,18 @@ export default function Hero() {
               </p>
             </div>
 
-            {/* CTA Buttons */}
+           {/* CTA Buttons */}
             <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4">
-              <button className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/25 hover:scale-105">
-                <span className="flex items-center justify-center gap-2">
-                  Get Quote Now
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
-              
-              <button className="group border-2 border-white/20 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm">
-                <span className="flex items-center justify-center gap-2">
-                  <Phone className="w-5 h-5" />
-                  Call Now
-                </span>
-              </button>
+              <a href="tel:+919239380072">
+                <button className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/25 hover:scale-105">
+                  <span className="flex items-center justify-center gap-2">
+                    Call Now
+                    <Phone className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
+              </a>
             </div>
+
 
             {/* Feature Icons */}
             <div ref={featuresRef} className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
