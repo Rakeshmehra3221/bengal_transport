@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Services />
       <About />
       <Contact />
+      <Analytics />
     </div>
   );
 }
